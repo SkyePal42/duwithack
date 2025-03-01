@@ -5,9 +5,9 @@ export default function Home() {
         <div className="max-w-md">
           <h1 className="text-5xl font-bold my-10">DUWIT TOGETHER</h1>
           <p className="py-6">
-            Don't space out on team formation! Launch at full speed with DUWIT
-            Together. We help assemble your crew with stellar precision; dodging
-            the fiasco of on the day, in person networking.
+            Don&pos;t space out on team formation! Launch at full speed with
+            DUWIT Together. We help assemble your crew with stellar precision;
+            dodging the fiasco of on the day, in person networking.
           </p>
           <button className="btn btn-xl btn-primary flex mx-auto my-5">
             Find a Team
