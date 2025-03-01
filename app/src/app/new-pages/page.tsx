@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 export default function NewPage() {
-  const [messages, setMessages] = useState([]); 
-  const [input, setInput] = useState(""); 
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState("");
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -40,35 +41,67 @@ export default function NewPage() {
       console.error("Error:", error);
       setMessages((prevMessages) => [
         ...prevMessages,
-        { role: "Gemini", text: "Sorry, there was an error. Please try again later." },
+        {
+          role: "Gemini",
+          text: "Sorry, there was an error. Please try again later.",
+        },
       ]);
     }
   };
 
-  return (
-    <div style={styles.body}>
-      <div id="chat" style={styles.chat}>
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            style={{
-              ...styles.message,
-              ...(msg.role === "user" ? styles.user : styles.bot),
-            }}
-          >
-            {msg.text}
-          </div>
-        ))}
+  const { user, error, isLoading } = useUser();
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>{error.message}</div>;
+  if (user) {
+    return (
+      <div
+        className="bg-base-200 flex flex-col justify-center items-center h-full w-screen"
+        // style={styles.body}
+      >
+        <div
+          id="chat"
+          className="card p-3 bg-base-100 shadow-sm h-[500px] w-[400px] mb-5"
+        >
+          {messages.map((msg, index) => (
+            <div
+              className={`chat ${
+                msg.role === "user" ? "chat-end" : "chat-start"
+              }`}
+            >
+              <div
+                key={index}
+                className={`chat-bubble ${
+                  msg.role === "user"
+                    ? "chat-bubble-primary"
+                    : "chat-bubble-info"
+                }`}
+              >
+                {msg.text}
+              </div>
+            </div>
+          ))}
+        </div>
+        <input
+          type="text"
+          id="input"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+          placeholder="Type your message..."
+          className="input w-[400px]"
+        />
       </div>
-      <input
-        type="text"
-        id="input"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        onKeyPress={(e) => e.key === "Enter" && sendMessage()}
-        placeholder="Type your message..."
-        style={styles.input}
-      />
+    );
+  }
+  return (
+    <div className="bg-base-200 flex flex-col justify-center items-center h-full w-screen">
+      <p className="text-7xl font-black text-red-600 text-center mb-10">
+        YOU ARE NOT LOGGED IN!!!!!!
+      </p>
+      <a className="btn btn-error btn-xl" href="/api/auth/login">
+        Login
+      </a>
     </div>
   );
 }

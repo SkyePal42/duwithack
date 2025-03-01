@@ -40,7 +40,9 @@ export default function RootLayout({
         >
           <div className="navbar bg-base-100 shadow-sm px-5 flex-none">
             <div className="flex-1">
-              <p className="font-semibold text-xl">DUWIT Together</p>
+              <p className="font-semibold text-xl hover:cursor-default">
+                DUWIT Together
+              </p>
             </div>
             <div className="flex-none">
               <NavBarButtons />

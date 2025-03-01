@@ -10,9 +10,6 @@ export const NavBarButtons = () => {
     <div className="nav-bar__buttons">
       {!user && (
         <>
-          <a className="btn btn-primary" href="/api/auth/signup">
-            signup
-          </a>
           <a className="btn btn-error" href="/api/auth/login">
             Login
           </a>
