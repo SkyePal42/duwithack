@@ -25,12 +25,6 @@ export default function Home() {
           <button className="btn btn-md btn-neutral flex mx-auto my-5">
             Request a Member
           </button>
-          <button
-            className="btn btn-xl btn-secondary flex mx-auto my-5"
-            onClick={handleNewPageClick}
-          >
-            Chat with Gemini
-          </button>
           <p className="mt-10 mb-5 font-bold underline text-lg">
             Lost? Check out:
           </p>
