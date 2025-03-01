@@ -1,4 +1,10 @@
+ "use client"
+import { useRouter } from "next/navigation"; 
 export default function Home() {
+  const router = useRouter(); 
+  const handleNewPageClick = () => {
+    router.push("/new-pages"); 
+  };
   return (
     <div className="hero bg-base-200 h-full">
       <div className="hero-content text-center">
@@ -14,6 +20,12 @@ export default function Home() {
           </button>
           <button className="btn btn-md btn-neutral flex mx-auto my-5">
             Request a Member
+          </button>
+          <button
+            className="btn btn-xl btn-secondary flex mx-auto my-5"
+            onClick={handleNewPageClick}
+          >
+            Chat with Gemini
           </button>
           <p className="mt-10 mb-5 font-bold underline text-lg">
             Lost? Check out:
