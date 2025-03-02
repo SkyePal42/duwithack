@@ -188,6 +188,7 @@ const Quiz: React.FC = () => {
         </div>
       ) : (
         <div className="text-center">
+<<<<<<< HEAD
           <h2>Your Personality Results</h2>
           <p>1. Collaboration vs. Lone Wolf: You are a <strong>{calculateResults().collaboration}</strong>.</p>
           <p>2. Introvert vs. Extrovert: You are an <strong>{calculateResults().introvert}</strong>.</p>
@@ -198,6 +199,55 @@ const Quiz: React.FC = () => {
             You are a {calculateResults().collaboration}, {calculateResults().introvert},{" "}
             {calculateResults().ingenuity}, {calculateResults().thinking}.
           </p>
+=======
+          <div className="bg-white p-6 rounded-lg shadow-md max-w-md mx-auto">
+  <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
+    Your Personality Results
+  </h2>
+  <div className="space-y-4">
+    <div className="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+      <span className="text-lg font-semibold text-gray-700 flex-1">
+        1. Collaboration vs. Lone Wolf:
+      </span>
+      <span className="text-xl font-bold text-blue-600">
+        {calculateResults().collaboration}
+      </span>
+    </div>
+    <div className="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+      <span className="text-lg font-semibold text-gray-700 flex-1">
+        2. Introvert vs. Extrovert:
+      </span>
+      <span className="text-xl font-bold text-green-600">
+        {calculateResults().introvert}
+      </span>
+    </div>
+    <div className="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+      <span className="text-lg font-semibold text-gray-700 flex-1">
+        3. Ingenuity vs. Moderate:
+      </span>
+      <span className="text-xl font-bold text-purple-600">
+        {calculateResults().ingenuity}
+      </span>
+    </div>
+    <div className="flex items-center bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+      <span className="text-lg font-semibold text-gray-700 flex-1">
+        4. Thinking vs. Feeling:
+      </span>
+      <span className="text-xl font-bold text-orange-600">
+        {calculateResults().thinking}
+      </span>
+    </div>
+  </div>
+</div>
+          {/* 显示 Gemini 的分析结果 */}
+          {geminiResponse && (
+            <div>
+              <h3>Gemini Analysis</h3>
+              <p>{geminiResponse.question}</p>
+              <pre>{JSON.stringify(geminiResponse.trait_confidences, null, 2)}</pre>
+            </div>
+          )}
+>>>>>>> f28beaccc061362703ff25fcbfb6089a247599a5
         </div>
       )}
     </div>
