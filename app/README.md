@@ -34,3 +34,68 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+{
+"type": "object",
+"properties": {
+"done": {
+"type": "boolean"
+},
+"question": {
+"type": "string"
+},
+"traits": {
+"type": "object",
+"properties": {
+"curiosity": {
+"type": "number"
+},
+"lone wolf vs collaborative": {
+"type": "number"
+},
+"focus": {
+"type": "number"
+},
+"sheep vs wolf": {
+"type": "number"
+},
+"ingenuity": {
+"type": "number"
+},
+"determination": {
+"type": "number"
+},
+"patience": {
+"type": "number"
+},
+"blunt vs vague": {
+"type": "number"
+},
+"detail-oriented vs conceptual": {
+"type": "number"
+}
+},
+"required": [
+"curiosity",
+"lone wolf vs collaborative",
+"focus",
+"sheep vs wolf",
+"ingenuity",
+"determination",
+"patience",
+"blunt vs vague",
+"detail-oriented vs conceptual"
+]
+},
+"multi-choice": {
+"type": "array",
+"items": {
+"type": "string"
+}
+}
+},
+"required": [
+"done",
+"traits"
+]
+}
