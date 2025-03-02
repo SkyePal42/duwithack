@@ -23,3 +23,21 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+/* 添加 tooltip 显示的 CSS 样式 */
+.tooltip-text {
+  display: none;
+}
+
+.group:hover .tooltip-text {
+  display: block;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: black;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+}

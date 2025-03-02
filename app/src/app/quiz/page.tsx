@@ -1,245 +1,223 @@
 "use client";
-import React, { useState } from 'react';
-import "../globals.css"; 
+import React, { useState, useEffect } from "react";
+import "../globals.css";
 
-// Define the structure of the scores object
-const initialScores = {
-  collaboration: { A: 0, B: 0 },
-  introvert: { A: 0, B: 0 },
-  ingenuity: { A: 0, B: 0 },
-  thinking: { A: 0, B: 0 },
+
+const initialTraitConfidences = {
+  curiosity: 0,
+  collaboration: 0,
+  focus: 0,
+  sheep_vs_wolf: 0,
+  ingenuity: 0,
+  determination: 0,
+  patience: 0,
+  communication_style: 0,
+  detail_vs_conceptual: 0,
 };
 
-// Define the structure of a question
-interface Question {
-  question: string;
-  options: { text: string; value: 'A' | 'B' }[];
-  dimension: keyof typeof initialScores; // Use initialScores instead of scores
+interface GeminiResponse {
+  done: boolean;
+  question?: string;
+  trait_confidences?: typeof initialTraitConfidences;
+  multi_choice?: string[];
+  keywords?: string[]; 
+  role_description?: string; 
 }
 
-// Quiz questions
-const questions: Question[] = [
-    {
-      question: "When working on a project, you prefer to:",
-      options: [
-        { text: "Work with a team, bouncing ideas off others.", value: "A" },
-        { text: "Work independently, focusing on your own ideas.", value: "B" },
-      ],
-      dimension: "collaboration",
-    },
-    {
-      question: "Your ideal work environment is:",
-      options: [
-        { text: "A bustling office with lots of interaction.", value: "A" },
-        { text: "A quiet space where you can concentrate alone.", value: "B" },
-      ],
-      dimension: "collaboration",
-    },
-    {
-      question: "When solving a problem, you:",
-      options: [
-        { text: "Seek input from others to find the best solution.", value: "A" },
-        { text: "Trust your own instincts and problem-solving skills.", value: "B" },
-      ],
-      dimension: "collaboration",
-    },
-    {
-      question: "After a long day, you recharge by:",
-      options: [
-        { text: "Spending time with friends or family.", value: "A" },
-        { text: "Having some alone time to relax.", value: "B" },
-      ],
-      dimension: "introvert",
-    },
-    {
-      question: "In social settings, you:",
-      options: [
-        { text: "Enjoy meeting new people and being the center of attention.", value: "A" },
-        { text: "Prefer deep conversations with a few close friends.", value: "B" },
-      ],
-      dimension: "introvert",
-    },
-    {
-      question: "When attending a large event, you:",
-      options: [
-        { text: "Feel energized and excited to network.", value: "A" },
-        { text: "Feel drained and look forward to leaving early.", value: "B" },
-      ],
-      dimension: "introvert",
-    },
-    {
-      question: "When faced with a challenge, you:",
-      options: [
-        { text: "Look for creative, outside-the-box solutions.", value: "A" },
-        { text: "Stick to tried-and-true methods that you know work.", value: "B" },
-      ],
-      dimension: "ingenuity",
-    },
-    {
-      question: "Your approach to life is:",
-      options: [
-        { text: "Innovative and always seeking new experiences.", value: "A" },
-        { text: "Practical and focused on stability.", value: "B" },
-      ],
-      dimension: "ingenuity",
-    },
-    {
-      question: "When learning something new, you:",
-      options: [
-        { text: "Experiment and explore unconventional methods.", value: "A" },
-        { text: "Follow structured guidelines and step-by-step processes.", value: "B" },
-      ],
-      dimension: "ingenuity",
-    },
-    {
-      question: "When making decisions, you prioritize:",
-      options: [
-        { text: "Logic, facts, and objective analysis.", value: "A" },
-        { text: "Emotions, values, and how others will be affected.", value: "B" },
-      ],
-      dimension: "thinking",
-    },
-    {
-      question: "In a disagreement, you:",
-      options: [
-        { text: "Focus on finding the most rational solution.", value: "A" },
-        { text: "Try to understand the other person's feelings and perspective.", value: "B" },
-      ],
-      dimension: "thinking",
-    },
-    {
-      question: "Your friends would describe you as:",
-      options: [
-        { text: "Analytical and level-headed.", value: "A" },
-        { text: "Empathetic and compassionate.", value: "B" },
-      ],
-      dimension: "thinking",
-    },
-  ];
-  
+const ResultsPage = ({
+  traitConfidences,
+  keywords,
+  roleDescription,
+}: {
+  traitConfidences: typeof initialTraitConfidences;
+  keywords: string[];
+  roleDescription: string;
+}) => {
+  return (
+    <div className="text-center">
+      <h2 className="text-3xl font-semibold mb-6">Your Personality Results</h2>
+      <div className="space-y-4">
+        {}
+        <div>
+          <h3 className="text-xl font-semibold mb-2">Personality Traits</h3>
+          <div className="grid grid-cols-2 gap-4">
+            {Object.entries(traitConfidences).map(([trait, confidence]) => (
+              <div key={trait} className="bg-gray-100 p-4 rounded-lg">
+                <p className="font-medium">{trait.replace(/_/g, " ")}</p>
+                <p>{confidence}%</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {}
+        {keywords && keywords.length > 0 && (
+          <div>
+            <h3 className="text-xl font-semibold mt-6 mb-2">Keywords</h3>
+            <div className="flex flex-wrap justify-center gap-2">
+              {keywords.map((keyword, index) => (
+                <span
+                  key={index}
+                  className="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full"
+                >
+                  {keyword}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {}
+        {roleDescription && (
+          <div>
+            <h3 className="text-xl font-semibold mt-6 mb-2">Role in Hackathon</h3>
+            <p className="bg-gray-100 p-4 rounded-lg text-left">{roleDescription}</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
 const Quiz: React.FC = () => {
-  const [scores, setScores] = useState(initialScores);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [currentQuestion, setCurrentQuestion] = useState<string>("");
+  const [multiChoice, setMultiChoice] = useState<string[]>([]);
+  const [traitConfidences, setTraitConfidences] = useState(initialTraitConfidences);
   const [showResults, setShowResults] = useState(false);
-  const [geminiResponse, setGeminiResponse] = useState(null); 
+  const [isLoading, setIsLoading] = useState(true);
+  const [keywords, setKeywords] = useState<string[]>([]); 
+  const [roleDescription, setRoleDescription] = useState<string>(""); 
+  const [error, setError] = useState<string | null>(null); 
 
-  // Handle user's answer
-  const handleAnswer = (dimension: keyof typeof initialScores, choice: 'A' | 'B') => {
-    setScores((prevScores) => ({
-      ...prevScores,
-      [dimension]: {
-        ...prevScores[dimension],
-        [choice]: prevScores[dimension][choice] + 1,
-      },
-    }));
+  useEffect(() => {
+    startQuiz();
+  }, []);
 
-    // Move to the next question or show results
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    } else {
-      setShowResults(true);
-      sendAnswersToGemini(); 
-    }
-  };
-
-  const sendAnswersToGemini = async () => {
+  const startQuiz = async () => {
     try {
-      const response = await fetch("/api/chat", {
+      const response = await fetch("/api", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: JSON.stringify(scores) }), 
+        body: JSON.stringify({ message: "begin" }), 
       });
 
       if (!response.ok) {
-        throw new Error("Failed to get response from server");
+        throw new Error("Failed to start quiz");
       }
 
-      const data = await response.json();
-      setGeminiResponse(data); 
+      const data: GeminiResponse = await response.json();
+      handleGeminiResponse(data);
     } catch (error) {
       console.error("Error:", error);
+      setError("Failed to start the quiz. Please try again later.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Calculate results
-  const calculateResults = () => {
-    const results = {
-      collaboration: scores.collaboration.A > scores.collaboration.B ? "Collaborator" : "Lone Wolf",
-      introvert: scores.introvert.A > scores.introvert.B ? "Extrovert" : "Introvert",
-      ingenuity: scores.ingenuity.A > scores.ingenuity.B ? "Ingenious" : "Moderate",
-      thinking: scores.thinking.A > scores.thinking.B ? "Thinker" : "Feeler",
-    };
-
-    return results;
+  const handleGeminiResponse = (data: GeminiResponse) => {
+    if (data.done) {
+      setShowResults(true);
+      setTraitConfidences(data.trait_confidences || initialTraitConfidences);
+      setKeywords(data.keywords || []); // 确保 keywords 被正确设置
+      setRoleDescription(data.role_description || "");
+    } else {
+      setCurrentQuestion(data.question || "");
+      setMultiChoice(data.multi_choice || []);
+      setTraitConfidences(data.trait_confidences || initialTraitConfidences);
+    }
   };
 
-  // Render the quiz or results
+  const handleAnswer = async (answer: string | number) => {
+    try {
+      const response = await fetch("/api", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: typeof answer === "number" ? multiChoice[answer] : answer,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send answer");
+      }
+
+      const data: GeminiResponse = await response.json();
+      handleGeminiResponse(data);
+    } catch (error) {
+      console.error("Error:", error);
+      setError("Failed to send your answer. Please try again.");
+    }
+  };
+
   return (
     <div className="hero bg-gradient-to-r from-indigo-600 to-blue-500 min-h-screen text-white">
       <div className="hero-content flex justify-center items-center">
-      <button
-            onClick={() => window.location.href = '/'}
-            className="absolute top-20 left-4 bg-indigo-600 text-white p-2 rounded-full hover:bg-indigo-700"
-          >
-            &larr; Home
-          </button>
+        <button
+          onClick={() => (window.location.href = "/")}
+          className="absolute top-20 left-4 bg-indigo-600 text-white p-2 rounded-full hover:bg-indigo-700"
+        >
+          &larr; Home
+        </button>
         <div className="max-w-xl bg-white p-8 rounded-lg shadow-lg text-gray-800 relative">
-          {/* Back to Home Button */}
+          <h1 className="text-4xl font-semibold text-center mb-6">Personality Quiz</h1>
 
-
-          <h1 className="text-4xl font-semibold text-center mb-6">Personal Quiz</h1>
-
-          {!showResults ? (
+          {error ? (
+            <div className="text-center text-red-600">
+              <p>{error}</p>
+              <button
+                onClick={startQuiz}
+                className="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+              >
+                Retry
+              </button>
+            </div>
+          ) : isLoading ? (
+            <div className="flex justify-center items-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+              <p className="ml-2">Loading...</p>
+            </div>
+          ) : !showResults ? (
             <div>
-              <h2 className="text-2xl font-bold mb-4">{questions[currentQuestionIndex].question}</h2>
+              <h2 className="text-2xl font-bold mb-4">{currentQuestion}</h2>
               <div className="space-y-4">
-                {questions[currentQuestionIndex].options.map((option, index) => (
-                  <div key={index}>
-                    <button
-                      className="btn btn-primary w-full py-3 rounded-lg text-white font-semibold bg-indigo-600 hover:bg-indigo-700 transition duration-300"
-                      onClick={() =>
-                        handleAnswer(questions[currentQuestionIndex].dimension, option.value)
-                      }
-                    >
-                      {option.text}
-                    </button>
+                {multiChoice.length > 0 ? (
+                  multiChoice.map((option, index) => (
+                    <div key={index}>
+                      <button
+                        className="btn btn-primary w-full py-3 rounded-lg text-white font-semibold bg-indigo-600 hover:bg-indigo-700 transition duration-300"
+                        onClick={() => handleAnswer(index)}
+                      >
+                        {option}
+                      </button>
+                    </div>
+                  ))
+                ) : (
+                  <div>
+                    <input
+                      type="text"
+                      className="w-full p-2 border border-gray-300 rounded-lg"
+                      placeholder="Type your answer..."
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleAnswer(e.currentTarget.value);
+                        }
+                      }}
+                    />
                   </div>
-                ))}
+                )}
               </div>
             </div>
           ) : (
-            <div className="text-center">
-              <h2 className="text-3xl font-semibold mb-6">Your Personality Results</h2>
-              <p className="mb-2">
-                <strong>Collaboration vs. Lone Wolf:</strong> You are a <strong>{calculateResults().collaboration}</strong>.
-              </p>
-              <p className="mb-2">
-                <strong>Introvert vs. Extrovert:</strong> You are an <strong>{calculateResults().introvert}</strong>.
-              </p>
-              <p className="mb-2">
-                <strong>Ingenuity vs. Moderate:</strong> You are <strong>{calculateResults().ingenuity}</strong>.
-              </p>
-              <p className="mb-6">
-                <strong>Thinking vs. Feeling:</strong> You are a <strong>{calculateResults().thinking}</strong>.
-              </p>
-
-              <h3 className="text-2xl font-semibold mb-4">Your Personality Profile</h3>
-              <p className="mb-4">
-                You are a {calculateResults().collaboration}, {calculateResults().introvert}, {calculateResults().ingenuity}, and {calculateResults().thinking}.
-              </p>
-
-              {/* Gemini Analysis */}
-              {geminiResponse && (
-                <div>
-                  <h3 className="text-xl font-semibold mb-4">Gemini Analysis</h3>
-                  <p>{geminiResponse.question}</p>
-                  <pre className="bg-gray-100 p-4 rounded-lg text-sm">{JSON.stringify(geminiResponse.trait_confidences, null, 2)}</pre>
-                </div>
-              )}
-            </div>
+            <ResultsPage
+              traitConfidences={traitConfidences}
+              keywords={keywords}
+              roleDescription={roleDescription}
+            />
           )}
         </div>
       </div>

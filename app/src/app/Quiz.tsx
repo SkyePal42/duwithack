@@ -27,14 +27,100 @@ const questions: Question[] = [
     ],
     dimension: "collaboration",
   },
-  // 其他问题...
+  {
+    question: "Your ideal work environment is:",
+    options: [
+      { text: "A bustling office with lots of interaction.", value: "A" },
+      { text: "A quiet space where you can concentrate alone.", value: "B" },
+    ],
+    dimension: "collaboration",
+  },
+  {
+    question: "When solving a problem, you:",
+    options: [
+      { text: "Seek input from others to find the best solution.", value: "A" },
+      { text: "Trust your own instincts and problem-solving skills.", value: "B" },
+    ],
+    dimension: "collaboration",
+  },
+  {
+    question: "After a long day, you recharge by:",
+    options: [
+      { text: "Spending time with friends or family.", value: "A" },
+      { text: "Having some alone time to relax.", value: "B" },
+    ],
+    dimension: "introvert",
+  },
+  {
+    question: "In social settings, you:",
+    options: [
+      { text: "Enjoy meeting new people and being the center of attention.", value: "A" },
+      { text: "Prefer deep conversations with a few close friends.", value: "B" },
+    ],
+    dimension: "introvert",
+  },
+  {
+    question: "When attending a large event, you:",
+    options: [
+      { text: "Feel energized and excited to network.", value: "A" },
+      { text: "Feel drained and look forward to leaving early.", value: "B" },
+    ],
+    dimension: "introvert",
+  },
+  {
+    question: "When faced with a challenge, you:",
+    options: [
+      { text: "Look for creative, outside-the-box solutions.", value: "A" },
+      { text: "Stick to tried-and-true methods that you know work.", value: "B" },
+    ],
+    dimension: "ingenuity",
+  },
+  {
+    question: "Your approach to life is:",
+    options: [
+      { text: "Innovative and always seeking new experiences.", value: "A" },
+      { text: "Practical and focused on stability.", value: "B" },
+    ],
+    dimension: "ingenuity",
+  },
+  {
+    question: "When learning something new, you:",
+    options: [
+      { text: "Experiment and explore unconventional methods.", value: "A" },
+      { text: "Follow structured guidelines and step-by-step processes.", value: "B" },
+    ],
+    dimension: "ingenuity",
+  },
+  {
+    question: "When making decisions, you prioritize:",
+    options: [
+      { text: "Logic, facts, and objective analysis.", value: "A" },
+      { text: "Emotions, values, and how others will be affected.", value: "B" },
+    ],
+    dimension: "thinking",
+  },
+  {
+    question: "In a disagreement, you:",
+    options: [
+      { text: "Focus on finding the most rational solution.", value: "A" },
+      { text: "Try to understand the other person's feelings and perspective.", value: "B" },
+    ],
+    dimension: "thinking",
+  },
+  {
+    question: "Your friends would describe you as:",
+    options: [
+      { text: "Analytical and level-headed.", value: "A" },
+      { text: "Empathetic and compassionate.", value: "B" },
+    ],
+    dimension: "thinking",
+  },
 ];
 
 const Quiz: React.FC = () => {
   const [scores, setScores] = useState(initialScores);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [showResults, setShowResults] = useState(false);
-  const [geminiResponse, setGeminiResponse] = useState(null); // 存储 Gemini 的响应
 
   // Handle user's answer
   const handleAnswer = (dimension: keyof typeof initialScores, choice: 'A' | 'B') => {
@@ -51,29 +137,6 @@ const Quiz: React.FC = () => {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       setShowResults(true);
-      sendAnswersToGemini(); // 用户回答完所有问题后，发送答案给 Gemini
-    }
-  };
-
-  // 发送用户答案给 Gemini
-  const sendAnswersToGemini = async () => {
-    try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ message: JSON.stringify(scores) }), // 将用户答案发送给后端
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to get response from server");
-      }
-
-      const data = await response.json();
-      setGeminiResponse(data); // 存储 Gemini 的响应
-    } catch (error) {
-      console.error("Error:", error);
     }
   };
 
@@ -94,28 +157,32 @@ const Quiz: React.FC = () => {
     <div className="text-center items-center p-4">
       <h1 className="text-5xl font-bold p-4">Personal Quiz</h1>
 
+
       {!showResults ? (
         <div>
           <h2 className="text-2xl font-bold p-4">{questions[currentQuestionIndex].question}</h2>
-          <div className="text-center items-center text-center">
-            {questions[currentQuestionIndex].options.map((option, index) => (
-              <div className="card-dash items-center text-center" key={index}>
-                <div className="card-body items-center text-center">
-                  <div className="card-actions justify-end">
-                    <button
-                      className="btn btn-primary avatar"
-                      onClick={() =>
+          <div className="text-center items-center text-center ">
+            {questions[currentQuestionIndex].options.map((option, index) => (      
+                
+                <div className="card-dash items-center text-center">
+                    <div className="card-body items-center text-center">
+                     <div className="card-actions justify-end">
+                        <button 
+                        key={index}
+                        className="btn btn-primary  avatar"
+                        onClick={() =>
                         handleAnswer(
-                          questions[currentQuestionIndex].dimension,
-                          option.value
-                        )
-                      }
-                    >
-                      {option.text}
-                    </button>
-                  </div>
-                </div>
+                            questions[currentQuestionIndex].dimension,
+                            option.value
+                            )
+                            }
+                            >
+                        {option.text}
+                            </button>
+                     </div>        
+
               </div>
+            </div>
             ))}
           </div>
         </div>
@@ -131,15 +198,6 @@ const Quiz: React.FC = () => {
             You are a {calculateResults().collaboration}, {calculateResults().introvert},{" "}
             {calculateResults().ingenuity}, {calculateResults().thinking}.
           </p>
-
-          {/* 显示 Gemini 的分析结果 */}
-          {geminiResponse && (
-            <div>
-              <h3>Gemini Analysis</h3>
-              <p>{geminiResponse.question}</p>
-              <pre>{JSON.stringify(geminiResponse.trait_confidences, null, 2)}</pre>
-            </div>
-          )}
         </div>
       )}
     </div>
