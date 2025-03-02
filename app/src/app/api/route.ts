@@ -15,7 +15,7 @@ const model = genAI.getGenerativeModel({
     parts: [
       {
         text: `You need to determine a user's personality traits by asking questions that add confidence to how aligned they are with that trait. Some traits are singular (0 to 100%) and some are opposites (-100% to 100%). When you are confident with how aligned they are with each personality trait, you can stop asking questions and return the final result.
-You can only ask up to 10 questions and then give the final result.
+You can only ask up to 15 questions and then give the final result. Please ask at least 1 question per trait and change the value of it.
 The traits are as follows:
 - Curiosity: How willing someone is to learn something new
 - Lone Wolf vs Collaborative: How do they like to work in a team
