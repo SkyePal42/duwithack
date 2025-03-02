@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import Link from "next/link"; // 引入 Link 组件
 
 export default function NewPage() {
   const [messages, setMessages] = useState([]);
@@ -55,43 +56,46 @@ export default function NewPage() {
   if (error) return <div>{error.message}</div>;
   if (user) {
     return (
-      <div
-        className="bg-base-200 flex flex-col justify-center items-center h-full w-screen"
-        // style={styles.body}
-      >
-        <div
-          id="chat"
-          className="card p-3 bg-base-100 shadow-sm h-[500px] w-[400px] mb-5"
-        >
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`chat ${
-                msg.role === "user" ? "chat-end" : "chat-start"
-              }`}
-            >
+      <div className="bg-base-200 min-h-screen w-screen p-4">
+        {/* 返回主页的按钮，固定在左上角 */}
+        <div className="absolute top-16 left-0">
+          <Link href="/" className="btn btn-sm btn-ghost">
+            ← Back to Home
+          </Link>
+        </div>
+
+        {/* 聊天内容 */}
+        <div className="flex flex-col items-center justify-center h-full pt-16">
+          <div
+            id="chat"
+            className="card p-6 bg-base-100 shadow-sm h-[600px] w-[800px] mb-5 overflow-y-auto"
+          >
+            {messages.map((msg, index) => (
               <div
                 key={index}
-                className={`chat-bubble ${
-                  msg.role === "user"
-                    ? "chat-bubble-primary"
-                    : "chat-bubble-info"
-                }`}
+                className={`chat ${msg.role === "user" ? "chat-end" : "chat-start"}`}
               >
-                {msg.text}
+                <div
+                  key={index}
+                  className={`chat-bubble ${
+                    msg.role === "user" ? "chat-bubble-primary" : "chat-bubble-info"
+                  }`}
+                >
+                  {msg.text}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <input
+            type="text"
+            id="input"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+            placeholder="Type your message..."
+            className="input w-[800px]"
+          />
         </div>
-        <input
-          type="text"
-          id="input"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && sendMessage()}
-          placeholder="Type your message..."
-          className="input w-[400px]"
-        />
       </div>
     );
   }

@@ -1,11 +1,14 @@
 "use client";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const { user /*, error, isLoading*/ } = useUser();
+  const { user } = useUser();
+  const router = useRouter();
 
-  // if (isLoading) return <div>Loading...</div>;
-  // if (error) return <div>{error.message}</div>;
+  const handleFindTeamClick = () => {
+    router.push("/skills"); // 跳转到 Skills 和 Interests 页面
+  };
 
   return (
     <div className="hero bg-base-200 h-full">
@@ -19,7 +22,10 @@ export default function Home() {
             DUWIT Together. We help assemble your crew with stellar precision;
             dodging the fiasco of on the day, in person networking.
           </p>
-          <button className="btn btn-xl btn-primary flex mx-auto my-5">
+          <button
+            className="btn btn-xl btn-primary flex mx-auto my-5"
+            onClick={handleFindTeamClick} // 绑定点击事件
+          >
             Find a Team
           </button>
           <button className="btn btn-md btn-neutral flex mx-auto my-5">
