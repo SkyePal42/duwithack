@@ -65,6 +65,7 @@ export default function NewPage() {
         >
           {messages.map((msg, index) => (
             <div
+              key={index}
               className={`chat ${
                 msg.role === "user" ? "chat-end" : "chat-start"
               }`}
@@ -105,49 +106,3 @@ export default function NewPage() {
     </div>
   );
 }
-
-// 内联样式
-const styles = {
-  body: {
-    fontFamily: "Arial, sans-serif",
-    margin: 0,
-    padding: 0,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100vh",
-    backgroundColor: "#f4f4f9",
-  },
-  chat: {
-    width: "400px",
-    height: "500px",
-    border: "1px solid #ccc",
-    padding: "10px",
-    overflowY: "auto",
-    backgroundColor: "#fff",
-    borderRadius: "8px",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-  },
-  input: {
-    width: "400px",
-    marginTop: "10px",
-    padding: "10px",
-    border: "1px solid #ccc",
-    borderRadius: "8px",
-    fontSize: "16px",
-  },
-  message: {
-    marginBottom: "10px",
-    padding: "8px",
-    borderRadius: "4px",
-  },
-  user: {
-    backgroundColor: "#e3f2fd",
-    textAlign: "right",
-  },
-  bot: {
-    backgroundColor: "#f5f5f5",
-    textAlign: "left",
-  },
-};
