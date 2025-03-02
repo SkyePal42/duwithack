@@ -101,7 +101,7 @@ export default function NewPage() {
   return (
     <div className="bg-base-200 flex flex-col justify-center items-center h-full w-screen">
       <p className="text-7xl font-black text-red-600 text-center mb-10">
-        YOU ARE NOT LOGGED IN!!!!!!
+      ( ｡ •̀ ᴖ •́ ｡)💢
       </p>
       <a className="btn btn-error btn-xl" href="/api/auth/login">
         Login
