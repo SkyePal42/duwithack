@@ -105,6 +105,12 @@ export default function SkillsInterestsPage() {
               </select>
             </div>
 
+            <fieldset className="fieldset">
+              <label className="label text-lg font-medium text-gray-700">Your Bio(Optional)</label>
+              <textarea className="textarea h-24 w-full " placeholder="Bio"></textarea>
+              <div className="fieldset-label">Optional</div>
+            </fieldset>
+
             {/* Submit Button */}
             <div className="form-control mt-6">
               <button
