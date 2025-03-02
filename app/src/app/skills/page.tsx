@@ -47,8 +47,8 @@ export default function SkillsInterestsPage() {
   };
 
   return (
-    <div className="hero bg-gradient-to-r from-indigo-600 to-blue-500 min-h-screen">
-      <div className="hero-content flex justify-center items-center">
+    <div className="hero bg-gradient-to-r from-indigo-600 to-blue-500 min-h-screen flex flex-col">
+      <div className="hero-content flex justify-center items-center flex-grow">
                   {/* Back to Home Button */}
                   <button
             onClick={handleGoHome}
@@ -103,9 +103,10 @@ export default function SkillsInterestsPage() {
                 <option value="intermediate">Intermediate</option>
                 <option value="advanced">Advanced</option>
               </select>
-            </div>
+              </div>
 
-            <fieldset className="fieldset">
+             <div className="divider divider-primary"></div>
+              <fieldset className="fieldset">
               <label className="label text-lg font-medium text-gray-700">Your Bio(Optional)</label>
               <textarea className="textarea h-24 w-full " placeholder="Bio"></textarea>
               <div className="fieldset-label">Optional</div>
@@ -123,6 +124,30 @@ export default function SkillsInterestsPage() {
           </form>
         </div>
       </div>
+      
+      <footer className="footer sm:footer-horizontal bg-neutral text-neutral-content p-10">  
+      <nav>
+    <h6 className="footer-title">Services</h6>
+    <a className="link link-hover">Branding</a>
+    <a className="link link-hover">Design</a>
+    <a className="link link-hover">Marketing</a>
+    <a className="link link-hover">Advertisement</a>
+  </nav>
+  <nav>
+    <h6 className="footer-title">Company</h6>
+    <a className="link link-hover">About us</a>
+    <a className="link link-hover">Contact</a>
+    <a className="link link-hover">Jobs</a>
+    <a className="link link-hover">Press kit</a>
+  </nav>
+      <nav>
+        <h6 className="footer-title">Legal</h6>
+        <a className="link link-hover">Terms of use</a>
+        <a className="link link-hover">Privacy policy</a>
+        <a className="link link-hover">Cookie policy</a>
+      </nav>
+      </footer>
     </div>
+    
   );
 }
